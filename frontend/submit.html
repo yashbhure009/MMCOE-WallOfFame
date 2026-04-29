@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Submit Achievement</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<h1 class="title">SUBMIT ACHIEVEMENT</h1>
+<p class="subtitle">MMCOE WALL OF FAME</p>
+
+<div class="stepper">
+
+<div class="step active" id="step1">
+<div class="circle">1</div>
+<p>CATEGORY</p>
+</div>
+
+<div class="step" id="step2">
+<div class="circle">2</div>
+<p>DETAILS</p>
+</div>
+
+<div class="step" id="step3">
+<div class="circle">3</div>
+<p>PROOF</p>
+</div>
+
+<div class="step" id="step4">
+<div class="circle">4</div>
+<p>REVIEW</p>
+</div>
+
+</div>
+
+<div class="container">
+
+<!-- PAGE 1 -->
+
+<div class="page active" id="page1">
+
+<h3>Select Category</h3>
+
+<div class="categories">
+
+<div class="category" data-cat="Academic">Academic</div>
+<div class="category" data-cat="Sports">Sports</div>
+<div class="category" data-cat="Cultural">Cultural</div>
+<div class="category" data-cat="Research">Research</div>
+<div class="category" data-cat="Certification">Certification</div>
+<div class="category" data-cat="Social Impact">Social Impact</div>
+
+</div>
+
+<div class="buttons">
+<button onclick="nextStep(2)">Next</button>
+</div>
+
+</div>
+
+<!-- PAGE 2 -->
+
+<div class="page" id="page2">
+
+<label>Achievement Title *</label>
+<input type="text" id="title">
+
+<label>Full Name *</label>
+<input type="text" id="name">
+
+<label>PRN *</label>
+<input type="text" id="prn">
+
+<label>Email *</label>
+<input type="email" id="email">
+
+<label>Description *</label>
+<textarea id="desc"></textarea>
+
+<div class="buttons">
+<button onclick="prevStep(1)">Back</button>
+<button onclick="nextStep(3)">Next</button>
+</div>
+
+</div>
+
+<!-- PAGE 3 -->
+
+<div class="page" id="page3">
+
+<label>Proof URL *</label>
+<input type="url" id="url">
+
+<div class="buttons">
+<button onclick="prevStep(2)">Back</button>
+<button onclick="nextStep(4)">Next</button>
+</div>
+
+</div>
+
+<!-- PAGE 4 -->
+
+<div class="page" id="page4">
+
+<h3>Review</h3>
+
+<div class="review-row">
+<span>Category</span>
+<span id="rvCategory"></span>
+</div>
+
+<div class="review-row">
+<span>Title</span>
+<span id="rvTitle"></span>
+</div>
+
+<div class="review-row">
+<span>Name</span>
+<span id="rvName"></span>
+</div>
+
+<div class="review-row">
+<span>PRN</span>
+<span id="rvPrn"></span>
+</div>
+
+<div class="review-row">
+<span>Email</span>
+<span id="rvEmail"></span>
+</div>
+
+<div class="review-row">
+<span>Description</span>
+<span id="rvDesc"></span>
+</div>
+
+<div class="review-row">
+<span>Proof URL</span>
+<span id="rvUrl"></span>
+</div>
+
+<div class="buttons">
+<button onclick="prevStep(3)">Back</button>
+<button onclick="submitForm()">Submit</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let category=null;
+
+/* category selection */
+
+document.querySelectorAll(".category").forEach(card=>{
+card.onclick=()=>{
+document.querySelectorAll(".category").forEach(c=>c.classList.remove("selected"));
+card.classList.add("selected");
+category=card.dataset.cat;
+};
+});
+
+/* next step */
+
+function nextStep(step){
+
+if(step==2 && !category){
+alert("Select category");
+return;
+}
+
+if(step==3){
+
+let title=document.getElementById("title").value.trim();
+let name=document.getElementById("name").value.trim();
+let prn=document.getElementById("prn").value.trim();
+let email=document.getElementById("email").value.trim();
+let desc=document.getElementById("desc").value.trim();
+
+if(title=="" || name=="" || prn=="" || email=="" || desc==""){
+alert("Fill all required fields");
+return;
+}
+
+}
+
+if(step==4){
+
+let url=document.getElementById("url").value.trim();
+
+if(url==""){
+alert("Enter proof link");
+return;
+}
+
+updateReview();
+
+}
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById("page"+step).classList.add("active");
+
+updateStepper(step);
+
+}
+
+/* previous step */
+
+function prevStep(step){
+
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById("page"+step).classList.add("active");
+
+updateStepper(step);
+
+}
+
+/* stepper update */
+
+function updateStepper(step){
+
+document.querySelectorAll(".step").forEach((s,i)=>{
+
+s.classList.remove("active","done");
+
+if(i+1<step)s.classList.add("done");
+if(i+1==step)s.classList.add("active");
+
+});
+
+}
+
+/* review update */
+
+function updateReview(){
+
+document.getElementById("rvCategory").textContent=category;
+document.getElementById("rvTitle").textContent=document.getElementById("title").value;
+document.getElementById("rvName").textContent=document.getElementById("name").value;
+document.getElementById("rvPrn").textContent=document.getElementById("prn").value;
+document.getElementById("rvEmail").textContent=document.getElementById("email").value;
+document.getElementById("rvDesc").textContent=document.getElementById("desc").value;
+document.getElementById("rvUrl").textContent=document.getElementById("url").value;
+
+}
+
+/* submit form */
+
+function submitForm(){
+
+const achievement={
+
+category:category,
+title:document.getElementById("title").value,
+name:document.getElementById("name").value,
+prn:document.getElementById("prn").value,
+email:document.getElementById("email").value,
+description:document.getElementById("desc").value,
+url:document.getElementById("url").value,
+
+status:"Pending",
+reason:""
+
+};
+
+function submitForm(){
+
+const achievement = {
+
+category: category,
+title: document.getElementById("title").value,
+name: document.getElementById("name").value,
+prn: document.getElementById("prn").value,
+email: document.getElementById("email").value,
+description: document.getElementById("desc").value,
+url: document.getElementById("url").value
+
+};
+
+fetch("submitAchievement",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(achievement)
+
+})
+.then(res=>res.text())
+.then(data=>{
+
+alert("Achievement submitted successfully! It will appear after admin approval.");
+
+window.location.href="index.html";
+
+});
+
+}
+
+window.location.href="index.html";
+
+}
+
+</script>
+
+</body>
+</html>
